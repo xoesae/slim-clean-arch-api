@@ -1,0 +1,30 @@
+{
+    "name": "cjuniordev/slim-clean-arch",
+    "description": "A slim template with clean architeture",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Core\\": "src/core/",
+            "Infra\\": "src/infra"
+        },
+        "files": [
+            "src/infra/helper/helpers.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Carlos Junior",
+            "email": "carlosrogeriocr02@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "slim/slim": "4.*",
+        "slim/psr7": "^1.6",
+        "php-di/php-di": "^7.0"
+    },
+    "scripts": {
+        "serve": "php -S localhost:8080 public/index.php",
+        "close": "killall -9 php"
+    }
+}
