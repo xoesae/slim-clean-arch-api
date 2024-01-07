@@ -46,4 +46,23 @@ readonly class UserUseCase
 
         return $this->repository->findById($user->id);
     }
+
+    /**
+     * @throws NotFoundException|MustBeUniqueException
+     */
+    public function update(int $id, string $name, string $email)
+    {
+        if ($this->repository->emailExists($email, [$id])) {
+            throw new MustBeUniqueException("Email must be unique");
+        }
+
+        $user = $this->repository->findById($id);
+        $user->name = $name;
+        $user->email = $email;
+
+        $this->repository->update($user);
+
+        return $user;
+
+    }
 }

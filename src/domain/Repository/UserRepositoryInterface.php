@@ -17,7 +17,9 @@ interface UserRepositoryInterface
      */
     public function findById(int $id): User;
 
-    public function emailExists(string $email): bool;
+    public function emailExists(string $email, array $ignoreIds = []): bool;
 
     public function create(User $user): void;
+
+    public function update(User $user): void;
 }

@@ -3,10 +3,12 @@
 namespace Infra\Persistence\Repository;
 
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\Query\Parameter;
 use Domain\Entity\User;
 use Domain\Exception\NotFoundException;
 use Domain\Repository\UserRepositoryInterface;
@@ -54,19 +56,33 @@ readonly class UserRepository implements UserRepositoryInterface
         }
     }
 
-    public function emailExists(string $email): bool
+    public function emailExists(string $email, array $ignoreIds = []): bool
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
+        $where = [
+            $queryBuilder->expr()->eq('users.email', ':email'),
+        ];
+        $params = new ArrayCollection([new Parameter('email', $email)]);
+
+        if (! empty($ignoreIds)) {
+            $where[] = $queryBuilder->expr()->notIn('users.id', ':ignore');
+            $params->add(new Parameter('ignore', $ignoreIds));
+        }
+
         $queryBuilder
             ->select('users.email')
             ->from(User::class, 'users')
-            ->where($queryBuilder->expr()->eq('users.email', ':email'))
-            ->setParameter('email', $email);
-
-        $query = $queryBuilder->getQuery();
+            ->where(
+                $queryBuilder->expr()->andX(...$where)
+            )
+            ->setParameters($params);
 
         try {
-            return (bool) $query->getSingleResult();
+            $result = $queryBuilder
+                ->getQuery()
+                ->getSingleResult();
+
+            return (bool) $result;
         } catch (NoResultException|NonUniqueResultException) {
             return false;
         }
@@ -76,6 +92,15 @@ readonly class UserRepository implements UserRepositoryInterface
      * @throws OptimisticLockException|ORMException
      */
     public function create(User $user): void
+    {
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @throws OptimisticLockException|ORMException
+     */
+    public function update(User $user): void
     {
         $this->entityManager->persist($user);
         $this->entityManager->flush();

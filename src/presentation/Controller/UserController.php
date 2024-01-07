@@ -37,4 +37,13 @@ final readonly class UserController
 
         return $this->renderer->json($response, $user);
     }
+
+    public function update(Request $request, Response $response, array $args): Response
+    {
+        // TODO: implement validation
+        $data = json_decode($request->getBody(), true);
+        $user = $this->useCase->update($args['id'], $data['name'], $data['email']);
+
+        return $this->renderer->json($response, $user);
+    }
 }
