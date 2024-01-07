@@ -24,6 +24,9 @@ final readonly class UserController
         return $this->renderer->json($response, $users);
     }
 
+    /**
+     * @throws NotFoundException
+     */
     public function show(Request $request, Response $response, array $args): Response
     {
         $user = $this->useCase->findById($args['id']);
@@ -31,6 +34,9 @@ final readonly class UserController
         return $this->renderer->json($response, $user);
     }
 
+    /**
+     * @throws MustBeUniqueException
+     */
     public function store(Request $request, Response $response, array $args): Response
     {
         // TODO: implement validation
@@ -40,6 +46,9 @@ final readonly class UserController
         return $this->renderer->json($response, $user);
     }
 
+    /**
+     * @throws MustBeUniqueException|NotFoundException
+     */
     public function update(Request $request, Response $response, array $args): Response
     {
         // TODO: implement validation
