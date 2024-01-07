@@ -2,10 +2,10 @@
 
 namespace Domain\Exception;
 
-class MustBeUniqueException extends \Exception
+class InvalidArgumentException extends \Exception
 {
-    const CODE = 409;
-    const MESSAGE = 'Must be unique';
+    const CODE = 422;
+    const MESSAGE = 'Invalid argument';
 
     protected $message;
     protected $code;
