@@ -105,4 +105,17 @@ readonly class UserRepository implements UserRepositoryInterface
         $this->entityManager->persist($user);
         $this->entityManager->flush();
     }
+
+    public function delete(User $user): bool
+    {
+        try {
+            $this->entityManager->remove($user);
+            $this->entityManager->flush();
+
+            return true;
+        } catch (ORMException $e) {
+            return false;
+        }
+
+    }
 }

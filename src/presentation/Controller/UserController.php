@@ -3,6 +3,8 @@
 namespace Presentation\Controller;
 
 use Application\Data\DTO\UserDTO;
+use Domain\Exception\MustBeUniqueException;
+use Domain\Exception\NotFoundException;
 use Domain\UseCase\UserUseCase;
 use Presentation\Http\JsonRenderer;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -45,5 +47,17 @@ final readonly class UserController
         $user = $this->useCase->update($args['id'], $data['name'], $data['email']);
 
         return $this->renderer->json($response, $user);
+    }
+
+    /**
+     * @throws NotFoundException
+     */
+    public function delete(Request $request, Response $response, array $args): Response
+    {
+        $result = $this->useCase->delete($args['id']);
+
+        return $this->renderer->json($response, [
+            'success' => $result,
+        ]);
     }
 }
