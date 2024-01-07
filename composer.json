@@ -4,12 +4,11 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "Core\\": "src/core/",
-            "Infra\\": "src/infra"
-        },
-        "files": [
-            "src/infra/helper/helpers.php"
-        ]
+            "Domain\\": "src/domain/",
+            "Infra\\": "src/infra",
+            "Presentation\\": "src/presentation",
+            "Application\\": "src/application"
+        }
     },
     "authors": [
         {
@@ -21,7 +20,10 @@
         "php": "^8.2",
         "slim/slim": "4.*",
         "slim/psr7": "^1.6",
-        "php-di/php-di": "^7.0"
+        "php-di/php-di": "^7.0",
+        "doctrine/orm": "^2.17",
+        "vlucas/phpdotenv": "^5.6",
+        "symfony/cache": "^7.0"
     },
     "scripts": {
         "serve": "php -S localhost:8080 public/index.php",
